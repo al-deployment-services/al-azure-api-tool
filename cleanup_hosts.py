@@ -17,8 +17,8 @@ TARGET_HOST = []
 MIN_DELTA = 30
 
 #request API call static Params
+#Change .net to .com if deployed in the Ashburn DC
 HEADERS = {'content-type': 'application/json'}
-# Change .net to .com if deployed in the Ashburn DC
 ALERT_LOGIC_API_TM_URL = "https://publicapi.alertlogic.net/api/tm/v1/"
 ALERT_LOGIC_API_LM_URL = "https://publicapi.alertlogic.net/api/lm/v1/"
 
