@@ -22,10 +22,10 @@ ALERT_LOGIC_API_CI = "api.cloudinsight.alertlogic.com"
 ALERT_LOGIC_CI_ENV = "https://api.cloudinsight.alertlogic.com/environments/v1/"
 ALERT_LOGIC_CI_SOURCES = "https://api.cloudinsight.alertlogic.com/sources/v1/"
 ALERT_LOGIC_CI_ASSETS = "https://api.cloudinsight.alertlogic.com/assets/v1/"
-# Change .net to .com if deployed in the Ashburn DC
-ALERT_LOGIC_CID = "https://api.alertlogic.net/api/customer/v1/"
-ALERT_LOGIC_API_TM_URL = "publicapi.alertlogic.net/api/tm/v1/"
-ALERT_LOGIC_API_CD = "publicapi.alertlogic.net"
+# Change .com to .net if deployed in the Denver DC
+ALERT_LOGIC_CID = "https://api.alertlogic.com/api/customer/v1/"
+ALERT_LOGIC_API_TM_URL = "publicapi.alertlogic.com/api/tm/v1/"
+ALERT_LOGIC_API_CD = "publicapi.alertlogic.com"
 
 MASTER_ENV = []
 PHOST_DIC = []

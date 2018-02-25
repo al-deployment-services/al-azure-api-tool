@@ -14,13 +14,13 @@ TARGET_SOURCE = []
 TARGET_HOST = []
 
 #minimum delta since last update
-MIN_DELTA = 30
+MIN_DELTA = 7
 
 #request API call static Params
-#Change .net to .com if deployed in the Ashburn DC
+#Change .com to .net if deployed in the Denver DC
 HEADERS = {'content-type': 'application/json'}
-ALERT_LOGIC_API_TM_URL = "https://publicapi.alertlogic.net/api/tm/v1/"
-ALERT_LOGIC_API_LM_URL = "https://publicapi.alertlogic.net/api/lm/v1/"
+ALERT_LOGIC_API_TM_URL = "https://publicapi.alertlogic.com/api/tm/v1/"
+ALERT_LOGIC_API_LM_URL = "https://publicapi.alertlogic.com/api/lm/v1/"
 
 def find_inactive_protectedhost():
 	RESPONSE = list_inactive_protectedhost()
