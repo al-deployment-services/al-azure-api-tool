@@ -15,7 +15,7 @@ MIN_DELTA = 7
 
 Requirements
 ------------
-* Python 2.x or 3.x, requests, hkdf
+* Python 2.x, requests, hkdf
 * Alert Logic Account ID (CID) - Contact Alert Logic support at support@alertlogic.com to get your customer id
 * Credentials to Alert Logic Cloud Insight (this call is made from Cloud Insight API endpoint)
 * User API Key for Alert Logic Cloud Defender API - API key can be requested from [here](https://www.alertlogic.com/resources/alert-logic-activeintegration-apis/#api-key)
