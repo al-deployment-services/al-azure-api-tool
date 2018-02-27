@@ -1,9 +1,11 @@
 from __future__ import print_function
 
-import sys, os
+import sys, os, datetime, json
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname( __file__ ), '..', 'lib')))
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname( __file__ ), '..', 'env/Lib/site-packages')))
-import json, requests, datetime
+import httplib, urllib
+import time
+from base64 import b64encode
 
 #Put your user API key and CID
 API_KEY = 'ENTER API KEY HERE'
@@ -17,10 +19,13 @@ TARGET_HOST = []
 MIN_DELTA = 7
 
 #request API call static Params
+CD_KEY = b64encode(bytes(API_KEY)).decode("ascii")
+CD_HEADERS = {}
+CD_HEADERS['Authorization'] = 'Basic ' + CD_KEY
+CD_HEADERS['Accept'] = 'application/json'
+
 #Change .com to .net if deployed in the Denver DC
-HEADERS = {'content-type': 'application/json'}
-ALERT_LOGIC_API_TM_URL = "https://publicapi.alertlogic.com/api/tm/v1/"
-ALERT_LOGIC_API_LM_URL = "https://publicapi.alertlogic.com/api/lm/v1/"
+ALERT_LOGIC_API_CD = "publicapi.alertlogic.com"
 
 def find_inactive_protectedhost():
 	RESPONSE = list_inactive_protectedhost()
@@ -55,39 +60,49 @@ def find_inactive_source():
 
 def list_inactive_protectedhost():
 	#find all protected host with deployment model agent and status is offline
-	API_ENDPOINT = ALERT_LOGIC_API_TM_URL + CUST_ID + "/protectedhosts?config.collection_method=agent&metadata.host_type=ms_azure&status.status=offline&type=host&offset=0"
-	REQUEST = requests.get(API_ENDPOINT, headers=HEADERS, auth=(API_KEY,''))
-	RESULT = json.loads(REQUEST.text)
+	API_ENDPOINT = "/api/tm/v1/" + CUST_ID + "/protectedhosts?config.collection_method=agent&metadata.host_type=ms_azure&status.status=offline&type=host&offset=0"
+	conn = httplib.HTTPSConnection(ALERT_LOGIC_API_CD)
+	conn.request('GET', API_ENDPOINT, headers=CD_HEADERS)
+	REQUEST = conn.getresponse()
+	RESULT = json.loads(REQUEST.read())
 	return RESULT
 
 def list_inactive_source():
 	#find all the source in log manager with deployment model syslog / agent and status is offline
-	API_ENDPOINT = ALERT_LOGIC_API_LM_URL + CUST_ID + "/sources?method=agent&metadata.host_type=ms_azure&status=offline&offset=0"
-	REQUEST = requests.get(API_ENDPOINT, headers=HEADERS, auth=(API_KEY,''))
-	RESULT = json.loads(REQUEST.text)
+	API_ENDPOINT = "/api/lm/v1/" + CUST_ID + "/sources?method=agent&metadata.host_type=ms_azure&status=offline&offset=0"
+	conn = httplib.HTTPSConnection(ALERT_LOGIC_API_CD)
+	conn.request('GET', API_ENDPOINT, headers=CD_HEADERS)
+	REQUEST = conn.getresponse()
+	RESULT = json.loads(REQUEST.read())
 	return RESULT
 
 def delete_inactive_protectedhost(target):
 	RESULT = ""
 	for items in target:
-		API_ENDPOINT = ALERT_LOGIC_API_TM_URL + CUST_ID + "/protectedhosts/" + items
-		REQUEST = requests.delete(API_ENDPOINT, headers=HEADERS, auth=(API_KEY,''))
-		RESULT = RESULT + str(REQUEST.text) + " Protected Host ID : " + items + "\n"
+		API_ENDPOINT = "/api/tm/v1/" + CUST_ID + "/protectedhosts/" + items
+		conn = httplib.HTTPSConnection(ALERT_LOGIC_API_CD)
+		conn.request('DELETE', API_ENDPOINT, headers=CD_HEADERS)
+		REQUEST = conn.getresponse()
+		RESULT = RESULT + str(REQUEST.read) + " Protected Host ID : " + items + "\n"
 	return RESULT
 
 def delete_inactive_source(target):
 	RESULT = ""
 	for items in target:
-		API_ENDPOINT = ALERT_LOGIC_API_LM_URL + CUST_ID + "/sources/" + items
-		REQUEST = requests.delete(API_ENDPOINT, headers=HEADERS, auth=(API_KEY,''))
+		API_ENDPOINT = "/api/lm/v1/" + CUST_ID + "/sources/" + items
+		conn = httplib.HTTPSConnection(ALERT_LOGIC_API_CD)
+		conn.request('DELETE', API_ENDPOINT, headers=CD_HEADERS)
+		REQUEST = conn.getresponse()
 		RESULT = RESULT + str(REQUEST.status_code) + " Source ID : " + items + "\n"
 	return RESULT
 
 def delete_inactive_host(target):
 	RESULT = ""
 	for items in target:
-		API_ENDPOINT = ALERT_LOGIC_API_TM_URL + CUST_ID + "/hosts/" + items
-		REQUEST = requests.delete(API_ENDPOINT, headers=HEADERS, auth=(API_KEY,''))
+		API_ENDPOINT = "/api/tm/v1/" + CUST_ID + "/hosts/" + items
+		conn = httplib.HTTPSConnection(ALERT_LOGIC_API_CD)
+		conn.request('DELETE', API_ENDPOINT, headers=CD_HEADERS)
+		REQUEST = conn.getresponse()
 		RESULT = RESULT + str(REQUEST.status_code) + " Host ID : " + items + "\n"
 	return RESULT
 
