@@ -24,7 +24,7 @@ Requirements
 Installation
 ------------
 ```
-git clone https://github.com/muram/al-azure-api-tool.git
+git clone https://github.com/al-deployment-services/al-azure-api-tool.git
 ```
 ```
 cd al-azure-api-tool
